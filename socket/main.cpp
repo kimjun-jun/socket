@@ -16,25 +16,35 @@
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "27015"				//ネットワーク系のポートを指定
 
+
+
 int __cdecl main(int argc, char **argv)
 {
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	struct addrinfo *result = NULL,				//相手のアドレス情報
 		*ptr = NULL,							//自分のアドレス情報
-		hints;
+		hints;									//設定用アドレス
 	const char *sendbuf = "this is a test";
 	char recvbuf[DEFAULT_BUFLEN];
 	int iResult;								//エラー全般検出
 	int recvbuflen = DEFAULT_BUFLEN;
 
+	PCSTR ServerADDR;
+	ServerADDR = "192.168.11.21";
+	PCSTR ClientADDR;
+	ClientADDR = "192.168.11.6";
+
 	// Validate the parameters
-	
+	/*
 	if (argc != 2) {
 		printf("usage: %s server-name\n", argv[0]);
+		printf("コマンドプロンプトから実行して引数にサーバーIPアドレスをいれてください\n");
+		printf("失敗!!___enterで終了\n");
+		getchar();
 		return 1;
 	}
-	
+	*/
 
 	// Initialize Winsock
 	//WSAStartup(バージョン指定, WSADATAのアドレス);
@@ -69,15 +79,18 @@ int __cdecl main(int argc, char **argv)
 	AF_UNSPECはunspecified
 	AF_INET→nternetwork: UDP, TCP, etc.
 	*/
-	hints.ai_family = AF_UNSPEC;
+	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
+
 
 	// Resolve the server address and port
 	//getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
 	//第一引数はサーバーのIPアドレス
 	//第二引数はサーバーのポートアドレス
-	iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
+	//iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
+
+	iResult = getaddrinfo(ServerADDR, DEFAULT_PORT, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
 		printf("失敗!!___enterで終了\n");
