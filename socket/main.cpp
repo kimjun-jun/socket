@@ -56,7 +56,10 @@ int __cdecl main(int argc, char **argv)
 		case WSAEFAULT:
 			printf("WSAEFAULT\n");				//第二引数であるlpWSAData は有効なポインタではない
 			break;
-		}		return 1;
+		}		
+		printf("失敗!!___enterで終了\n");
+		getchar();
+		return 1;
 	}
 
 	ZeroMemory(&hints, sizeof(hints));
@@ -68,6 +71,8 @@ int __cdecl main(int argc, char **argv)
 	iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
+		printf("失敗!!___enterで終了\n");
+		getchar();
 		WSACleanup();
 		return 1;
 	}
@@ -78,12 +83,16 @@ int __cdecl main(int argc, char **argv)
 		// Create a SOCKET for connecting to server
 		ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
 			ptr->ai_protocol);
+
+		printf("サーバーに接続します\n");
+
 		if (ConnectSocket == INVALID_SOCKET) {
 			printf("socket failed with error: %ld\n", WSAGetLastError());
+			printf("失敗!!___enterで終了\n");
+			getchar();
 			WSACleanup();
 			return 1;
 		}
-
 		// Connect to server.
 		iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
 		if (iResult == SOCKET_ERROR) {
@@ -98,11 +107,17 @@ int __cdecl main(int argc, char **argv)
 
 	if (ConnectSocket == INVALID_SOCKET) {
 		printf("Unable to connect to server!\n");
+		printf("失敗!!___enterで終了\n");
+		getchar();
 		WSACleanup();
 		return 1;
 	}
 
 	// Send an initial buffer
+	printf("サーバーに接続成功___enter押してメッセージを送信\n");
+	getchar();
+	printf("送信しました\n");
+
 	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
 	if (iResult == SOCKET_ERROR) {
 		printf("send failed with error: %d\n", WSAGetLastError());
@@ -110,8 +125,9 @@ int __cdecl main(int argc, char **argv)
 		WSACleanup();
 		return 1;
 	}
-
-	printf("Bytes Sent: %ld\n", iResult);
+	printf("メッセージ送信成功したよ!!\n");
+	printf("Bytes Sent(送信): %ld\n", iResult);
+	printf("サーバーからの応答を待ってるよ...\n\n");
 
 	// shutdown the connection since no more data will be sent
 	iResult = shutdown(ConnectSocket, SD_SEND);
@@ -127,15 +143,27 @@ int __cdecl main(int argc, char **argv)
 
 		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
 		if (iResult > 0)
-			printf("Bytes received: %d\n", iResult);
+		{
+			printf("サーバーからの応答があったよ!!\n");
+			printf("メッセージが来てるみたい__enter押してメッセージを確認\n");
+			getchar();
+			printf("Bytes received(受信): %d\n", iResult);
+		}
 		else if (iResult == 0)
+		{
 			printf("Connection closed\n");
+			printf("失敗!!___enterで終了\n");
+			getchar();
+		}
 		else
+		{
 			printf("recv failed with error: %d\n", WSAGetLastError());
-
+			printf("失敗!!___enterで終了\n");
+			getchar();
+		}
 	} while (iResult > 0);
 
-	rewind(stdin);
+	printf("通信成功!!___enterで終了\n");
 	getchar();
 
 	// cleanup
