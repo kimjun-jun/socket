@@ -14,27 +14,27 @@
 
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27015"
+#define DEFAULT_PORT "27015"				//ネットワーク系のポートを指定
 
 int __cdecl main(int argc, char **argv)
 {
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
-	struct addrinfo *result = NULL,
-		*ptr = NULL,
+	struct addrinfo *result = NULL,				//相手のアドレス情報
+		*ptr = NULL,							//自分のアドレス情報
 		hints;
 	const char *sendbuf = "this is a test";
 	char recvbuf[DEFAULT_BUFLEN];
-	int iResult;
+	int iResult;								//エラー全般検出
 	int recvbuflen = DEFAULT_BUFLEN;
 
 	// Validate the parameters
-	/*
+	
 	if (argc != 2) {
 		printf("usage: %s server-name\n", argv[0]);
 		return 1;
 	}
-	*/
+	
 
 	// Initialize Winsock
 	//WSAStartup(バージョン指定, WSADATAのアドレス);
@@ -63,11 +63,20 @@ int __cdecl main(int argc, char **argv)
 	}
 
 	ZeroMemory(&hints, sizeof(hints));
+	/*
+	ここが肝
+	hints.ai_family = AF_UNSPEC;
+	AF_UNSPECはunspecified
+	AF_INET→nternetwork: UDP, TCP, etc.
+	*/
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
 
 	// Resolve the server address and port
+	//getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
+	//第一引数はサーバーのIPアドレス
+	//第二引数はサーバーのポートアドレス
 	iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
@@ -84,7 +93,6 @@ int __cdecl main(int argc, char **argv)
 		ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
 			ptr->ai_protocol);
 
-		printf("サーバーに接続します\n");
 
 		if (ConnectSocket == INVALID_SOCKET) {
 			printf("socket failed with error: %ld\n", WSAGetLastError());
@@ -94,6 +102,8 @@ int __cdecl main(int argc, char **argv)
 			return 1;
 		}
 		// Connect to server.
+		printf("サーバーに接続するよ___enterで接続\n");
+		getchar();
 		iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
 		if (iResult == SOCKET_ERROR) {
 			closesocket(ConnectSocket);
@@ -103,6 +113,7 @@ int __cdecl main(int argc, char **argv)
 		break;
 	}
 
+	// result開放
 	freeaddrinfo(result);
 
 	if (ConnectSocket == INVALID_SOCKET) {
@@ -116,7 +127,6 @@ int __cdecl main(int argc, char **argv)
 	// Send an initial buffer
 	printf("サーバーに接続成功___enter押してメッセージを送信\n");
 	getchar();
-	printf("送信しました\n");
 
 	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
 	if (iResult == SOCKET_ERROR) {
@@ -126,7 +136,7 @@ int __cdecl main(int argc, char **argv)
 		return 1;
 	}
 	printf("メッセージ送信成功したよ!!\n");
-	printf("Bytes Sent(送信): %ld\n", iResult);
+//	printf("自分のIPアドレス(送信): %s\n",);
 	printf("サーバーからの応答を待ってるよ...\n\n");
 
 	// shutdown the connection since no more data will be sent
@@ -152,8 +162,6 @@ int __cdecl main(int argc, char **argv)
 		else if (iResult == 0)
 		{
 			printf("Connection closed\n");
-			printf("失敗!!___enterで終了\n");
-			getchar();
 		}
 		else
 		{
