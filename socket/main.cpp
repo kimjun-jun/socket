@@ -89,7 +89,7 @@ int __cdecl main(int argc, char **argv)
 	//第一引数はサーバーのIPアドレス
 	//第二引数はサーバーのポートアドレス
 	//iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
-
+	//サーバー名のIPアドレスを要求するgetaddrinfo関数
 	iResult = getaddrinfo(ServerADDR, DEFAULT_PORT, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
@@ -121,6 +121,8 @@ int __cdecl main(int argc, char **argv)
 		if (iResult == SOCKET_ERROR) {
 			closesocket(ConnectSocket);
 			ConnectSocket = INVALID_SOCKET;
+			printf("やばい___enterで次へ\n");
+			getchar();
 			continue;
 		}
 		break;
