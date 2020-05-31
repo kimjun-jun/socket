@@ -14,7 +14,8 @@
 
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "80"				//ネットワーク系のポートを指定
+#define DEFAULT_PORT "27015"				//ネットワーク系のポートを指定
+
 
 
 
@@ -86,7 +87,7 @@ int __cdecl main(int argc, char **argv)
 
 	// Resolve the server address and port
 	//getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
-	//第一引数はサーバーのIPアドレス
+	//第一引数はサーバーのIPアドレスもしくはホスト名
 	//第二引数はサーバーのポートアドレス
 	//iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
 	//サーバー名のIPアドレスを要求するgetaddrinfo関数
