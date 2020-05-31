@@ -14,7 +14,7 @@
 
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27015"				//ネットワーク系のポートを指定
+#define DEFAULT_PORT "50000"				//ネットワーク系のポートを指定
 
 
 
