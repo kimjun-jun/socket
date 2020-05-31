@@ -31,7 +31,7 @@ int __cdecl main(int argc, char **argv)
 	int recvbuflen = DEFAULT_BUFLEN;
 
 	PCSTR ServerADDR;
-	ServerADDR = "192.168.11.21";
+	ServerADDR = "192.168.11.100";
 	PCSTR ClientADDR;
 	ClientADDR = "192.168.11.6";
 
