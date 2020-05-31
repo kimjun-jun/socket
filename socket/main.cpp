@@ -14,7 +14,7 @@
 
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27015"				//ネットワーク系のポートを指定
+#define DEFAULT_PORT "80"				//ネットワーク系のポートを指定
 
 
 
@@ -100,6 +100,7 @@ int __cdecl main(int argc, char **argv)
 	}
 
 	// Attempt to connect to an address until one succeeds
+
 	for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
 
 		// Create a SOCKET for connecting to server
