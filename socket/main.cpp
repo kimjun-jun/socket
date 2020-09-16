@@ -23,8 +23,8 @@ int __cdecl main(int argc, char **argv)
 {
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
-	struct addrinfo *result = NULL,				//相手のアドレス情報
-		*ptr = NULL,							//自分のアドレス情報
+	struct addrinfo *result = NULL,				//相手のアドレス情報確定
+		*ptr = NULL,							//相手のアドレス情報
 		hints;									//設定用アドレス
 	const char *sendbuf = "this is a test";
 	char recvbuf[DEFAULT_BUFLEN];
@@ -83,6 +83,7 @@ int __cdecl main(int argc, char **argv)
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
+	hints.ai_flags = AI_PASSIVE;
 
 
 	// Resolve the server address and port
