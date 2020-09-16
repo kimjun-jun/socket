@@ -116,6 +116,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="winsock1-1clientTCP.cpp" />
+    <ClCompile Include="winsock1-1clientUDP.cpp" />
+    <ClCompile Include="winsock2-0clientTCP.cpp" />
+    <ClCompile Include="winsock2-0clientUDP.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
