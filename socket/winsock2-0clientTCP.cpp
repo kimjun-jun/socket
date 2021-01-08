@@ -36,7 +36,7 @@ struct sockaddr_in dstAddr;
 /* 各種パラメータ */
 int numrcv;
 char buffer[BUFFER_SIZE]; //送られてくるデータ内容
-char toSendText[1024] = "1";
+char toSendText[1024];
 int status;
 //////////////////////////////////////////////////////////
 
@@ -118,26 +118,10 @@ void Packet(void)
 void SendPacket(int i)
 {
 	/* パケット送出 */
-	printf("Send回数%d\n",i+1);
-	send(dstSocket, toSendText, strlen(toSendText) + 1, 0);
-	numrcv = recv(dstSocket, buffer, BUFFER_SIZE, 0);
-	if (numrcv < 1)
-	{
-		if (WSAGetLastError() == WSAEWOULDBLOCK)
-		{
-			// まだ来ない。
-			//printf("ただ今の接続人数%s\n", buffer);
-		}
-		else
-		{
-			printf("error : 0x%x\n", WSAGetLastError());
-		}
-	}
-	else
-	{
-		printf("received: ただ今の接続人数%s\n", buffer);
-	}
-	Sleep(1000);
+	sprintf_s(toSendText, "%s%d", toSendText, i + 1);
+	printf("Send回数%d　中身%s\n",i+1, toSendText);
+	send(dstSocket, toSendText, BUFFER_SIZE+1, 0);
+	//Sleep(1000);
 }
 
 void ReceivePacket(void)
